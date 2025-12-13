@@ -38,7 +38,7 @@ Notes:
 ## Project Structure
 
 - `game_of_life_gui.py` — Tkinter Game of Life GUI + simulation logic
-- `virtual_mouse.py` — MediaPipe hand tracking and gesture detection (event mode)
+- `gesture_detection.py` — MediaPipe hand tracking and gesture detection (event mode)
 - `app.py` — Integration layer (connects gestures to the Tkinter grid)
 - `requirements.txt` — Python dependencies
 
