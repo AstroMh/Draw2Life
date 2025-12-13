@@ -2,7 +2,7 @@
 
 This project implements **Conway’s Game of Life** with a **Tkinter GUI** and adds **hand-gesture interaction** using **OpenCV + MediaPipe**.  
 You can **draw live cells** on the grid using a pinch gesture and **clear the grid** using a hold gesture—no physical mouse required.
-This is the final project for the Computer algebra class which we tried to push it further by using computer vision had_detection techniques using pretrained piplines from mediapipe.
+This is the final project for the Computer algebra class which we tried to push it further by using computer vision hand-detection techniques using pre-trained landmark detection piplines from mediapipe.
 
 ---
 
