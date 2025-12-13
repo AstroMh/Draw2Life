@@ -1,7 +1,7 @@
 import cv2
 
-from gesture_detection import VirtualHandMouse
-from game_of_life_gui import GameOfLifeGUI
+from src.gesture_detection import VirtualHandMouse
+from src.game_of_life_gui import GameOfLifeGUI
 
 
 class HandControlledLifeApp:
