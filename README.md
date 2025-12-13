@@ -93,8 +93,8 @@ You will typically see:
 
 ## Troubleshooting
 
-- **Camera does not open**: try a different camera index in `app.py` / `virtual_mouse.py` (0, 1, 2).
-- **Lag**: reduce camera resolution in `virtual_mouse.py` (e.g., 640×480) and/or disable landmark drawing.
+- **Camera does not open**: try a different camera index in `app.py` / `gesture_detection.py` (0, 1, 2).
+- **Lag**: reduce camera resolution in `gesture_detetction.py` (e.g., 640×480) and/or disable landmark drawing.
 - **Gesture drawing doesn’t work after Start/Pause**: ensure Pause switches back to Draw mode (or restrict drawing to when not running).
 
 ---
