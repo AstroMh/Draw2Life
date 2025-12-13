@@ -97,7 +97,3 @@ You will typically see:
 - **Gesture drawing doesn’t work after Start/Pause**: ensure Pause switches back to Draw mode (or restrict drawing to when not running).
 
 ---
-
-## License
-
-Add a license of your choice (MIT recommended).
