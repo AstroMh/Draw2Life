@@ -1,117 +1,103 @@
 # Draw2Life
 
-This project extends the classic Conway’s Game of Life by introducing a gesture-based control system using webcam hand tracking. Instead of manipulating the grid with a mouse, users interact with the Game of Life through real-time hand movements detected by MediaPipe. This merges cellular automata, computer vision, and graphical user interface programming into a single interactive system.
+This project implements **Conway’s Game of Life** with a **Tkinter GUI** and adds **hand-gesture interaction** using **OpenCV + MediaPipe**.  
+You can **draw live cells** on the grid using a pinch gesture and **clear the grid** using a hold gesture—no physical mouse required.
 
-## Overview
-
-Conway’s Game of Life is a two-dimensional cellular automaton where simple rules create complex emergent behaviors. Our implementation provides a Tkinter-based GUI for visualization and simulation control. In addition, we built a virtual mouse using MediaPipe and OpenCV that maps hand positions to cursor movement and uses gesture-based clicks. The long-term goal is to integrate both systems so users can draw cell patterns and interact with the simulation using only hand gestures.
+---
 
 ## Features
 
-- Tkinter GUI for Conway’s Game of Life  
-- Real-time simulation with Start, Pause, Step, Clear, and Random controls  
-- Clickable grid for toggling cell states  
-- Webcam-based hand tracking using MediaPipe  
-- Virtual mouse controlled entirely by hand gestures  
-- Gesture-based clicking (thumb–pinky for left-click)  
-- Smooth cursor movement using interpolation  
-- Planned integration: draw Game of Life patterns using hand gestures instead of the physical mouse
+- Conway’s Game of Life simulation (Tkinter GUI)
+- Controls: Start, Pause, Step, Clear, Random
+- Hand-tracked pointer (red highlight on the grid)
+- Gesture-based drawing (thumb + middle finger pinch)
+- Gesture-based clearing (open palm hold)
+- Stable drawing logic (anti-flicker + “paint alive” behavior)
+
+---
+
+## Gestures Guide
+
+### 1) Draw Cells (Paint Alive)
+**Gesture:** Touch **thumb tip** to **middle finger tip** (pinch)  
+**Effect:** While pinched, moving your hand over the grid will **paint cells alive**.
+
+Notes:
+- Drawing is active in **Draw mode** (or after you pause if your code switches mode back to Draw).
+- The system paints cells alive (it does not toggle), so you will not get instant erase due to gesture flicker.
+
+### 2) Clear the Grid
+**Gesture:** Show an **open palm** (all fingers extended) and **hold** it for a short time  
+**Effect:** Clears the entire grid.
+
+Notes:
+- Clearing is ignored while you are pinching (to avoid accidental clears).
+
+---
 
 ## Project Structure
 
-- **virtual_mouse.py** – Webcam hand tracking and virtual mouse controller  
-- **game_of_life_gui.py** – Tkinter-based Game of Life implementation  
-- **README.md** – Project documentation  
+- `game_of_life_gui.py` — Tkinter Game of Life GUI + simulation logic
+- `virtual_mouse.py` — MediaPipe hand tracking and gesture detection (event mode)
+- `app.py` — Integration layer (connects gestures to the Tkinter grid)
+- `requirements.txt` — Python dependencies
 
-## Tech Stack
-
-- Python 3.x  
-- OpenCV – Webcam capture and image processing  
-- MediaPipe – Real-time hand landmark detection  
-- PyAutoGUI – Cursor movement  
-- pynput – Mouse press/release actions  
-- NumPy – Grid operations for Game of Life  
-- Tkinter – GUI rendering of the automaton
+---
 
 ## Installation
 
-1. Clone the repository.  
-2. (Recommended) create a virtual environment.  
-3. Install dependencies: OpenCV, MediaPipe, PyAutoGUI, pynput, NumPy.  
-4. Make sure your system has:  
-   - A working webcam  
-   - Python GUI support (for Tkinter)  
-   - OS permissions for camera access  
+### 1) Create and activate a virtual environment (recommended)
+Windows:
+- `python -m venv venv`
+- `venv\Scripts\activate`
 
-## Usage
+macOS / Linux:
+- `python3 -m venv venv`
+- `source venv/bin/activate`
 
-### 1. Virtual Mouse (Hand Tracking)
+### 2) Install dependencies
+- `pip install -r requirements.txt`
 
-Run `virtual_mouse.py` to enable hand-controlled cursor movement.  
+---
 
-Gestures:  
-- Thumb–index close → activate movement  
-- Thumb–pinky close → left-click press  
-- Thumb–pinky separate → release click  
+## Run
 
-Movement is mapped to screen coordinates and smoothed to reduce jitter. Press `q` in the OpenCV window to exit.
+Start the full hand-controlled app:
 
-### 2. Game of Life GUI
+- `python app.py`
 
-Run `game_of_life_gui.py` to open the cellular automaton.  
+You will typically see:
+- A **Tkinter** window for the Game of Life grid
+- An **OpenCV preview window** showing hand tracking (press **q** to hide the preview)
 
-Controls:  
-- **Start** – Begin continuous simulation  
-- **Pause** – Stop simulation  
-- **Step** – Advance one generation  
-- **Clear** – Reset the grid  
-- **Random** – Fill randomly with live cells  
-- **Click any cell** to toggle alive/dead  
-
-### 3. (Planned) Fully Integrated Gesture-Controlled Game of Life
-
-The goal is to combine both modules so that:  
-- The virtual mouse no longer controls the OS cursor  
-- Instead, hand coordinates directly control the Tkinter grid  
-- Gesture-based clicks toggle cell states  
-- Users can “draw” initial patterns with their hands  
-- Additional gestures may control Start/Pause/Clear modes  
-
-This will transform the Game of Life into an interactive, gesture-driven simulator.
+---
 
 ## How It Works
 
-### Hand Tracking System
+### Hand Tracking
+- OpenCV reads webcam frames
+- MediaPipe Hands detects landmarks
+- Thumb position is used as a “pointer”
+- Thumb–middle distance controls drawing (pinch)
+- Open palm hold triggers clear
 
-1. OpenCV captures webcam frames  
-2. Frames are mirrored and passed into MediaPipe  
-3. MediaPipe extracts 21 hand landmarks  
-4. Distances between finger tips determine gestures  
-5. Thumb position is mapped to screen coordinates  
-6. Cursor movement is smoothed for stability  
-7. pynput and PyAutoGUI produce click and movement events  
+### Game of Life
+- Grid is stored as a NumPy boolean array
+- Each generation follows standard Conway rules:
+  - Alive cell survives with 2–3 neighbors
+  - Dead cell becomes alive with exactly 3 neighbors
+- Tkinter Canvas renders the grid in real time
 
-### Game of Life Engine
+---
 
-1. A 2D NumPy grid stores alive/dead states  
-2. For each cell, neighbors are counted with boundary checks  
-3. Conway’s rules determine the next generation  
-4. Grid is redrawn on a Tkinter Canvas using rectangles  
-5. Tkinter’s `after()` method animates simulation smoothly  
+## Troubleshooting
 
-## Roadmap
+- **Camera does not open**: try a different camera index in `app.py` / `virtual_mouse.py` (0, 1, 2).
+- **Lag**: reduce camera resolution in `virtual_mouse.py` (e.g., 640×480) and/or disable landmark drawing.
+- **Gesture drawing doesn’t work after Start/Pause**: ensure Pause switches back to Draw mode (or restrict drawing to when not running).
 
-- Full integration of hand tracking + Game of Life  
-- Gesture-based grid editing  
-- Gesture-based mode switching (start, pause, clear)  
-- Overlay of the Game of Life grid directly on webcam feed (optional)  
-- Multi-hand support or pinch-to-zoom (optional)
+---
 
-## Known Limitations
+## License
 
-- Hand tracking depends on lighting and camera quality  
-- Gesture thresholds may require tuning  
-- Virtual mouse uses OS-level cursor (until integration is complete)  
-- Tkinter rendering speed may limit extremely large grids  
-
-
+Add a license of your choice (MIT recommended).
