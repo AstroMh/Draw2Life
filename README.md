@@ -91,6 +91,12 @@ You will typically see:
 
 ---
 
+### Screenshots
+
+![Random screen](Screenshots/Random_screen.png)
+
+![Draw with Gestures](Screenshots/Screen_after_drawing.png)
+
 ## Troubleshooting
 
 - **Camera does not open**: try a different camera index in `app.py` / `gesture_detection.py` (0, 1, 2).
